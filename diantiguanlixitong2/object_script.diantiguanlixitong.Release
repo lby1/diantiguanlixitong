@@ -1,0 +1,17 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\login.o
+./release\qreplytimeout.o
+./release\mytitlebar.o
+./release\basewindow.o
+./release\mainwindow1.o
+./release\globalvar.o
+./release\qrc_source.o
+./release\moc_mainwindow.o
+./release\moc_login.o
+./release\moc_qreplytimeout.o
+./release\moc_mytitlebar.o
+./release\moc_basewindow.o
+./release\moc_mainwindow1.o
+);

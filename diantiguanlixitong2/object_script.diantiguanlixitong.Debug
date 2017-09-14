@@ -1,0 +1,17 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\login.o
+./debug\qreplytimeout.o
+./debug\mytitlebar.o
+./debug\basewindow.o
+./debug\mainwindow1.o
+./debug\globalvar.o
+./debug\qrc_source.o
+./debug\moc_mainwindow.o
+./debug\moc_login.o
+./debug\moc_qreplytimeout.o
+./debug\moc_mytitlebar.o
+./debug\moc_basewindow.o
+./debug\moc_mainwindow1.o
+);

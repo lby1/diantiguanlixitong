@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>C:/Users/hp/Desktop/111.jpg</file>
+        <file>C:/Users/hp/Desktop/1111.jpg</file>
+        <file>Resources/MyTitle/max.png</file>
+        <file>Resources/MyTitle/close.png</file>
+        <file>Resources/MyTitle/min.png</file>
+        <file>C:/Users/hp/Desktop/222.png</file>
+        <file>C:/Users/hp/Desktop/2222.jpg</file>
+    </qresource>
+</RCC>
