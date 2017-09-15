@@ -2676,7 +2676,7 @@ void BaseWindow::initdata()
     int i= ui->treeView->width();
 
 
-    QFile file("c:/Users/hp/desktop/chuibai.QSS");
+    QFile file("C:/Users/Administrator/Desktop/chuibai.QSS");
      file.open(QIODevice::ReadOnly);
      QString s=file.readAll();
      file.close();

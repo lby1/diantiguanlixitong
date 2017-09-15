@@ -19,6 +19,12 @@ MainWindow1::~MainWindow1()
 
 void MainWindow1::init()
 {
+    QFile file("C:/Users/Administrator/Desktop/chuibai.QSS");
+     file.open(QIODevice::ReadOnly);
+     QString s=file.readAll();
+     file.close();
+     this->setStyleSheet(s);
+
     manager=new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(reply(QNetworkReply *)));
     //获取待审核设备列表
