@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     basewindow.cpp \
     mainwindow1.cpp \
     globalvar.cpp \
-    deviceinfo.cpp
+    deviceinfo.cpp \
+    itemdelegateforcol.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     basewindow.h \
     mainwindow1.h \
     globalvar.h \
-    deviceinfo.h
+    deviceinfo.h \
+    itemdelegateforcol.h
 
 FORMS    += mainwindow.ui \
     login.ui \

@@ -3,6 +3,7 @@
 #include "globalvar.h"
 #include "qreplytimeout.h"
 #include "deviceinfo.h"
+#include "itemdelegateforcol.h"
 
 MainWindow1::MainWindow1(QWidget *parent) :
     QMainWindow(parent),
@@ -19,6 +20,18 @@ MainWindow1::~MainWindow1()
 
 void MainWindow1::init()
 {
+    QFile file("c:/Users/hp/desktop/chuibai.QSS");
+     file.open(QIODevice::ReadOnly);
+     QString s=file.readAll();
+     file.close();
+     this->setStyleSheet(s);
+//    this->setWindowFlags(Qt::FramelessWindowHint);
+//    MyTitleBar* m_titleBar;
+//    m_titleBar = new MyTitleBar(this);
+//    m_titleBar->move(0, 0);
+//    m_titleBar->setTitleContent("电梯管理系统");
+//    m_titleBar->setTitleIcon("C:/Users/hp/Desktop/170823140829.png");
+
     manager=new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(reply(QNetworkReply *)));
     //获取待审核设备列表
@@ -28,11 +41,19 @@ void MainWindow1::init()
 //    QObject::connect(manager,SIGNAL(finished(QNetworkReply*)),&loop,SLOT(quit()));
 //    loop.exec();
     model_deviceList=new QStandardItemModel();
+    model_deviceList->setColumnCount(2);
     model_deviceList2=new QStandardItemModel();
     model_deviceList3=new QStandardItemModel();
-    ui->listView->setModel(model_deviceList);
-    ui->listView_2->setModel(model_deviceList2);
-    ui->listView_3->setModel(model_deviceList3);
+    ui->tableview_daishen->setModel(model_deviceList);
+    ui->tableview_tongguo->setModel(model_deviceList2);
+    ui->tableview_weitongguo->setModel(model_deviceList3);
+    ui->tableview_daishen->horizontalHeader()->setVisible(false);
+    ui->tableview_tongguo->horizontalHeader()->setVisible(false);
+    ui->tableview_weitongguo->horizontalHeader()->setVisible(false);
+    ui->tableview_daishen->verticalHeader()->setVisible(false);
+    ui->tableview_tongguo->verticalHeader()->setVisible(false);
+    ui->tableview_weitongguo->verticalHeader()->setVisible(false);
+
 }
 
 void MainWindow1::getDevicelist()
@@ -51,7 +72,7 @@ void MainWindow1::getDevicelist()
     deviceList_Reply=manager->post(req,byte_array);
     QReplyTimeout *pTimeout = new QReplyTimeout(deviceList_Reply, 10000);
     connect(pTimeout, &QReplyTimeout::timeout, [=]() {
-        ui->statusbar->showMessage("网络超时！",5000);
+        ui->statusbar->showMessage("网络超时！",10000);
     });
 }
 
@@ -72,6 +93,8 @@ void MainWindow1::reply(QNetworkReply *rep)
                     QJsonObject obj = json.object();
                     QJsonArray devicelistarr=obj.take("deviceList").toArray();
                     model_deviceList->clear();
+                    //ItemDelegateforCol *delegate=new ItemDelegateforCol(1);
+                    //ui->tableview_daishen->setItemDelegateForColumn(1,delegate);
                     for(int i=0;i<devicelistarr.count();i++)
                     {
                         QJsonObject device=devicelistarr.at(i).toObject();
@@ -106,8 +129,22 @@ void MainWindow1::reply(QNetworkReply *rep)
                         devicexiangqing.insert("report",device.take("report").toString());//设备下是否有检测单12
                         globalvar::deviceList.append(devicexiangqing);
                         model_deviceList->appendRow(new QStandardItem(devicexiangqing.value("deviceName")));
+                        //通过按钮
+                        QPushButton* btn1=new QPushButton("通过");
+                        model_deviceList->setItem(i,1,new QStandardItem(""));;
+                        ui->tableview_daishen->setIndexWidget(model_deviceList->index(i,1),btn1);
+                        btn1->setProperty("row",i);
+                        connect(btn1,SIGNAL(clicked(bool)),this,SLOT(onbutton_tongguoclick()));
+                        QPushButton* btn2=new QPushButton("不通过");
+                        model_deviceList->setItem(i,2,new QStandardItem(""));;
+                        ui->tableview_daishen->setIndexWidget(model_deviceList->index(i,2),btn2);
+                        btn2->setProperty("row",i);
+                        connect(btn2,SIGNAL(clicked(bool)),this,SLOT(onbutton_tongguoclick()));
+
                         itemlist.append(i);
+
                     }
+                    //ui->tableview_daishen->setItemDelegate(new ItemDelegateforCol(1));
                 }
             }
         }
@@ -122,7 +159,7 @@ void MainWindow1::updateModel(qint64,qint64)
 
 void MainWindow1::slot_view_device(bool)
 {
-    int row=ui->listView->currentIndex().row();
+    int row=ui->tableview_daishen->currentIndex().row();
     deviceInfo *Info=new deviceInfo(row);
     Info->show();
 }
@@ -141,7 +178,7 @@ void MainWindow1::translateLanguage()
 
 void MainWindow1::contextMenuEvent(QContextMenuEvent *e)
 {
-    if(ui->listView->hasFocus())
+    if(ui->tableview_daishen->hasFocus())
     {
        createActions();
        translateLanguage();
@@ -156,100 +193,156 @@ void MainWindow1::contextMenuEvent(QContextMenuEvent *e)
 
 void MainWindow1::on_pushButton_clicked()//通过
 {
-    int row=ui->listView->currentIndex().row();
-    if(row==-1)
-        return;
-    //备注信息
-    globalvar::deviceList[itemlist.at(row)].insert("deviceRemark",ui->textEdit->toPlainText());
-    ui->textEdit->clear();
-    //审核结果
-    globalvar::deviceList[itemlist.at(row)].insert("deviceStatus","2");
-    //从未审核列表移除
-    model_deviceList->removeRow(row);
-    itemlist2.append(itemlist.at(row));
-    itemlist.removeAt(row);
-    //添加到已审核列表
-    model_deviceList2->appendRow(new QStandardItem(globalvar::deviceList[itemlist2[itemlist2.count()-1]].value("deviceName")));
+
+    //    int row=ui->listView->currentIndex().row();
+//    if(row==-1)
+//        return;
+//    //备注信息
+//    globalvar::deviceList[itemlist.at(row)].insert("deviceRemark",ui->textEdit->toPlainText());
+//    ui->textEdit->clear();
+//    //审核结果
+//    globalvar::deviceList[itemlist.at(row)].insert("deviceStatus","2");
+//    //从未审核列表移除
+//    model_deviceList->removeRow(row);
+//    itemlist2.append(itemlist.at(row));
+//    itemlist.removeAt(row);
+//    //添加到已审核列表
+//    model_deviceList2->appendRow(new QStandardItem(globalvar::deviceList[itemlist2[itemlist2.count()-1]].value("deviceName")));
 
 }
 
 void MainWindow1::on_pushButton_2_clicked()//不通过
 {
-    int row=ui->listView->currentIndex().row();
-    if(row==-1)
-        return;
-    //备注信息
-    globalvar::deviceList[itemlist.at(row)].insert("deviceRemark",ui->textEdit->toPlainText());
-    ui->textEdit->clear();
-    //审核结果
-    globalvar::deviceList[itemlist.at(row)].insert("deviceStatus","3");
-    //从未审核列表移除
-    model_deviceList->removeRow(row);
-    itemlist3.append(itemlist.at(row));
-    itemlist.removeAt(row);
-    //添加到已审核列表
-    model_deviceList3->appendRow(new QStandardItem(globalvar::deviceList[itemlist3[itemlist3.count()-1]].value("deviceName")));
+//    int row=ui->listView->currentIndex().row();
+//    if(row==-1)
+//        return;
+//    //备注信息
+//    globalvar::deviceList[itemlist.at(row)].insert("deviceRemark",ui->textEdit->toPlainText());
+//    ui->textEdit->clear();
+//    //审核结果
+//    globalvar::deviceList[itemlist.at(row)].insert("deviceStatus","3");
+//    //从未审核列表移除
+//    model_deviceList->removeRow(row);
+//    itemlist3.append(itemlist.at(row));
+//    itemlist.removeAt(row);
+//    //添加到已审核列表
+//    model_deviceList3->appendRow(new QStandardItem(globalvar::deviceList[itemlist3[itemlist3.count()-1]].value("deviceName")));
 }
 
 void MainWindow1::on_pushButton_3_clicked()//重新审核
 {
-    if(ui->listView_2->hasFocus())
-    {
-        int row=ui->listView_2->currentIndex().row();
-        if(row==-1)
-            return;
-        //备注信息
-        globalvar::deviceList[itemlist2.at(row)].insert("deviceRemark","");//清空
-        ui->textEdit->clear();
-        //审核结果
-        globalvar::deviceList[itemlist2.at(row)].insert("deviceStatus","1");
-        //从未审核列表移除
-        model_deviceList2->removeRow(row);
-        itemlist.append(itemlist2.at(row));
-        itemlist2.removeAt(row);
-        //添加到已审核列表
-        model_deviceList->appendRow(new QStandardItem(globalvar::deviceList[itemlist[itemlist.count()-1]].value("deviceName")));
-    }
-    if(ui->listView_3->hasFocus())
-    {
-        int row=ui->listView_3->currentIndex().row();
-        if(row==-1)
-            return;
-        //备注信息
-        globalvar::deviceList[itemlist3.at(row)].insert("deviceRemark","");//清空
-        ui->textEdit->clear();
-        //审核结果
-        globalvar::deviceList[itemlist3.at(row)].insert("deviceStatus","1");
-        //从未审核列表移除
-        model_deviceList3->removeRow(row);
-        itemlist.append(itemlist3.at(row));
-        itemlist3.removeAt(row);
-        //添加到已审核列表
-        model_deviceList->appendRow(new QStandardItem(globalvar::deviceList[itemlist[itemlist.count()-1]].value("deviceName")));
-    }
+//    if(ui->listView_2->hasFocus())
+//    {
+//        int row=ui->listView_2->currentIndex().row();
+//        if(row==-1)
+//            return;
+//        //备注信息
+//        globalvar::deviceList[itemlist2.at(row)].insert("deviceRemark","");//清空
+//        ui->textEdit->clear();
+//        //审核结果
+//        globalvar::deviceList[itemlist2.at(row)].insert("deviceStatus","1");
+//        //从未审核列表移除
+//        model_deviceList2->removeRow(row);
+//        itemlist.append(itemlist2.at(row));
+//        itemlist2.removeAt(row);
+//        //添加到已审核列表
+//        model_deviceList->appendRow(new QStandardItem(globalvar::deviceList[itemlist[itemlist.count()-1]].value("deviceName")));
+//    }
+//    if(ui->listView_3->hasFocus())
+//    {
+//        int row=ui->listView_3->currentIndex().row();
+//        if(row==-1)
+//            return;
+//        //备注信息
+//        globalvar::deviceList[itemlist3.at(row)].insert("deviceRemark","");//清空
+//        ui->textEdit->clear();
+//        //审核结果
+//        globalvar::deviceList[itemlist3.at(row)].insert("deviceStatus","1");
+//        //从未审核列表移除
+//        model_deviceList3->removeRow(row);
+//        itemlist.append(itemlist3.at(row));
+//        itemlist3.removeAt(row);
+//        //添加到已审核列表
+//        model_deviceList->appendRow(new QStandardItem(globalvar::deviceList[itemlist[itemlist.count()-1]].value("deviceName")));
+//    }
 }
 
 void MainWindow1::on_pushButton_4_clicked()//提交审核
 {
-    QJsonObject json;
-    for(int i=0;i<globalvar::deviceList.count();i++)
-    {
-        QJsonObject device;
-        device.insert("deviceId",globalvar::deviceList[i].value("deviceId"));
-        device.insert("deviceStatus",globalvar::deviceList[i].value("deviceStatus"));
-        device.insert("deviceRemark",globalvar::deviceList[i].value("deviceRemark"));
-        json.insert("d"+QString::number(i),device);
-    }
-    QJsonDocument docu;
-    docu.setObject(json);
-    QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
-    //QString json_str(byte_array);
-    QNetworkRequest req;
-    req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
-    //发送用户数据到服务器
-    tijiaodevice_reply=manager->post(req,byte_array);
-    QReplyTimeout *pTimeout = new QReplyTimeout(tijiaodevice_reply, 10000);
-    connect(pTimeout, &QReplyTimeout::timeout, [=]() {
-        ;
-    });
+//    QJsonObject json;
+//    for(int i=0;i<globalvar::deviceList.count();i++)
+//    {
+//        QJsonObject device;
+//        device.insert("deviceId",globalvar::deviceList[i].value("deviceId"));
+//        device.insert("deviceStatus",globalvar::deviceList[i].value("deviceStatus"));
+//        device.insert("deviceRemark",globalvar::deviceList[i].value("deviceRemark"));
+//        json.insert("d"+QString::number(i),device);
+//    }
+//    QJsonDocument docu;
+//    docu.setObject(json);
+//    QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
+//    //QString json_str(byte_array);
+//    QNetworkRequest req;
+//    req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
+//    //发送用户数据到服务器
+//    tijiaodevice_reply=manager->post(req,byte_array);
+//    QReplyTimeout *pTimeout = new QReplyTimeout(tijiaodevice_reply, 10000);
+//    connect(pTimeout, &QReplyTimeout::timeout, [=]() {
+//        ;
+    //    });
+}
+
+void MainWindow1::onbutton_tongguoclick()//通过
+{
+    QPushButton* button=(QPushButton*)sender();
+    int row =button->property("row").toInt();
+    qDebug()<<row;
+
+        QJsonObject json;
+        for(int i=0;i<globalvar::deviceList.count();i++)
+        {
+            QJsonObject device;
+            device.insert("deviceId",globalvar::deviceList[i].value("deviceId"));
+            device.insert("deviceStatus",globalvar::deviceList[i].value("deviceStatus"));
+            device.insert("deviceRemark",globalvar::deviceList[i].value("deviceRemark"));
+            json.insert("d"+QString::number(i),device);
+        }
+        QJsonDocument docu;
+        docu.setObject(json);
+        QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
+        //QString json_str(byte_array);
+        QNetworkRequest req;
+        req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
+        //发送用户数据到服务器
+        tijiaodevice_reply=manager->post(req,byte_array);
+        QReplyTimeout *pTimeout = new QReplyTimeout(tijiaodevice_reply, 10000);
+        connect(pTimeout, &QReplyTimeout::timeout, [=]() {
+            ;
+            });
+}
+
+void MainWindow1::onbutton_butongguoclick()//不通过
+{
+
+
+    QPushButton* button=(QPushButton*)sender();
+    int row =button->property("row").toInt();
+    qDebug()<<row;
+
+        QJsonObject json;
+        json.insert("deviceId",globalvar::deviceList[row].value("deviceId"));
+        json.insert("deviceStatus","3");
+        json.insert("deviceRemark",globalvar::deviceList[row].value("deviceRemark"));
+        QJsonDocument docu;
+        docu.setObject(json);
+        QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
+        //QString json_str(byte_array);
+        QNetworkRequest req;
+        req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
+        //发送用户数据到服务器
+        tijiaodevice_reply=manager->post(req,byte_array);
+        QReplyTimeout *pTimeout = new QReplyTimeout(tijiaodevice_reply, 10000);
+        connect(pTimeout, &QReplyTimeout::timeout, [=]() {
+            ;
+            });
 }

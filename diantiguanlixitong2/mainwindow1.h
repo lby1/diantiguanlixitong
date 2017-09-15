@@ -38,6 +38,10 @@ private slots:
 
     void on_pushButton_4_clicked();
 
+    void onbutton_tongguoclick();//通过按钮的槽
+
+    void onbutton_butongguoclick();//不通过按钮的槽
+
 private:
     Ui::MainWindow1 *ui;
     QNetworkAccessManager*manager;

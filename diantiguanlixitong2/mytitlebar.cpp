@@ -66,6 +66,7 @@ void MyTitleBar::initControl()
     this->setFixedHeight(TITLE_HEIGHT);
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setButtonType(MIN_MAX_BUTTON);
+    this->setFixedWidth(500);
 }
 
 // 信号槽的绑定;
