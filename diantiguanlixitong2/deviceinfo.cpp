@@ -1,4 +1,4 @@
-#include "deviceinfo.h"
+﻿#include "deviceinfo.h"
 #include "ui_deviceinfo.h"
 #include <QPainter>
 #include "globalvar.h"
@@ -11,6 +11,7 @@ deviceInfo::deviceInfo(int devicerow,QWidget *parent) :
     _devicerow=devicerow;
     init();
 	int i;
+i+=1;
 }
 
 deviceInfo::~deviceInfo()
