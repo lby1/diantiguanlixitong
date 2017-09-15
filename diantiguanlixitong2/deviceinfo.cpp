@@ -10,6 +10,7 @@ deviceInfo::deviceInfo(int devicerow,QWidget *parent) :
     ui->setupUi(this);
     _devicerow=devicerow;
     init();
+	int i;
 }
 
 deviceInfo::~deviceInfo()
