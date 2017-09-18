@@ -21,6 +21,7 @@ MainWindow1::~MainWindow1()
 
 void MainWindow1::init()
 {
+<<<<<<< HEAD
     QFile file("c:/Users/hp/desktop/chuibai.QSS");
      file.open(QIODevice::ReadOnly);
      QString s=file.readAll();
@@ -32,6 +33,13 @@ void MainWindow1::init()
 //    m_titleBar->move(0, 0);
 //    m_titleBar->setTitleContent("电梯管理系统");
 //    m_titleBar->setTitleIcon("C:/Users/hp/Desktop/170823140829.png");
+=======
+    QFile file("C:/Users/Administrator/Desktop/chuibai.QSS");
+     file.open(QIODevice::ReadOnly);
+     QString s=file.readAll();
+     file.close();
+     this->setStyleSheet(s);
+>>>>>>> bd124c71366d1e83dfa1cbd4bacf3a65a58e1b45
 
     manager=new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(reply(QNetworkReply *)));
