@@ -7,6 +7,9 @@ INPUT(
 ./release\basewindow.o
 ./release\mainwindow1.o
 ./release\globalvar.o
+./release\deviceinfo.o
+./release\itemdelegateforcol.o
+./release\remark.o
 ./release\qrc_source.o
 ./release\moc_mainwindow.o
 ./release\moc_login.o
@@ -14,4 +17,6 @@ INPUT(
 ./release\moc_mytitlebar.o
 ./release\moc_basewindow.o
 ./release\moc_mainwindow1.o
+./release\moc_deviceinfo.o
+./release\moc_remark.o
 );

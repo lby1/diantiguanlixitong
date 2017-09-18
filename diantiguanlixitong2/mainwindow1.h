@@ -25,6 +25,7 @@ public:
     ~MainWindow1();
     void init();
     void getDevicelist();//获取待审核设备列表
+    void getxindanlist();//新单确认列表
 private slots:
     void reply(QNetworkReply *);//manager的reply
     void updateModel(qint64,qint64);//下载进度
@@ -38,11 +39,18 @@ private slots:
 
     void on_pushButton_4_clicked();
 
+    void onbutton_tongguoclick();//通过按钮的槽
+
+    void onbutton_butongguoclick();//不通过按钮的槽
+
 private:
     Ui::MainWindow1 *ui;
     QNetworkAccessManager*manager;
     QNetworkReply* deviceList_Reply;//待审核设备列表
     QNetworkReply* tijiaodevice_reply;//提交审核
+    QNetworkReply* tongguo_reply;//提交审核
+    QNetworkReply* butongguo_reply;//提交审核
+    QNetworkReply* xindanqueren_reply;//提交审核
     QStandardItemModel*model_deviceList;//未审核设备列表的model
     QStandardItemModel*model_deviceList2;//审核通过设备列表的model
     QStandardItemModel*model_deviceList3;//审核未通过设备列表的model
