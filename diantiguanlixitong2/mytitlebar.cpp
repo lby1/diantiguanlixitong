@@ -180,7 +180,7 @@ void MyTitleBar::paintEvent(QPaintEvent *event)
     // 当窗口最大化或者还原后，窗口长度变了，标题栏的长度应当一起改变;
     if (this->width() != this->parentWidget()->width())
     {
-        this->setFixedWidth(this->parentWidget()->width());
+        //this->setFixedWidth(this->parentWidget()->width());
     }
     QWidget::paintEvent(event);
 }

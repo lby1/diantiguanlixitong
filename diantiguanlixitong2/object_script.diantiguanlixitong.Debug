@@ -7,6 +7,9 @@ INPUT(
 ./debug\basewindow.o
 ./debug\mainwindow1.o
 ./debug\globalvar.o
+./debug\deviceinfo.o
+./debug\itemdelegateforcol.o
+./debug\remark.o
 ./debug\qrc_source.o
 ./debug\moc_mainwindow.o
 ./debug\moc_login.o
@@ -14,4 +17,6 @@ INPUT(
 ./debug\moc_mytitlebar.o
 ./debug\moc_basewindow.o
 ./debug\moc_mainwindow1.o
+./debug\moc_deviceinfo.o
+./debug\moc_remark.o
 );

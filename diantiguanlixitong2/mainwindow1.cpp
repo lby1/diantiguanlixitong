@@ -4,6 +4,7 @@
 #include "qreplytimeout.h"
 #include "deviceinfo.h"
 #include "itemdelegateforcol.h"
+#include "remark.h"
 
 MainWindow1::MainWindow1(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +25,7 @@ void MainWindow1::init()
      file.open(QIODevice::ReadOnly);
      QString s=file.readAll();
      file.close();
-     this->setStyleSheet(s);
+     //this->setStyleSheet(s);
 //    this->setWindowFlags(Qt::FramelessWindowHint);
 //    MyTitleBar* m_titleBar;
 //    m_titleBar = new MyTitleBar(this);
@@ -60,6 +61,27 @@ void MainWindow1::getDevicelist()
 {
     QJsonObject json;
     json.insert("userId",globalvar::userInfo.value("userId"));
+    json.insert("deviceStatus", "1");
+    json.insert("deviceCompany", "");
+    json.insert("deviceNumber", "");
+    QJsonDocument docu;
+    docu.setObject(json);
+    QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
+    //QString json_str(byte_array);
+    QNetworkRequest req;
+    req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/deviceList"));
+    //发送用户数据到服务器
+    deviceList_Reply=manager->post(req,byte_array);
+    QReplyTimeout *pTimeout = new QReplyTimeout(deviceList_Reply, 10000);
+    connect(pTimeout, &QReplyTimeout::timeout, [=]() {
+        ui->statusbar->showMessage("网络超时！",10000);
+    });
+}
+
+void MainWindow1::getxindanlist()
+{
+    QJsonObject json;
+    json.insert("userId",globalvar::userInfo.value("userId"));
     json.insert("deviceCompany", "");
     json.insert("deviceNumber", "");
     QJsonDocument docu;
@@ -78,7 +100,7 @@ void MainWindow1::getDevicelist()
 
 void MainWindow1::reply(QNetworkReply *rep)
 {
-    if(rep==deviceList_Reply)//待审核设备列表
+    if(rep==deviceList_Reply)//获取待审核设备列表
     {
         if(rep->error()==QNetworkReply::NoError)
         {
@@ -139,12 +161,62 @@ void MainWindow1::reply(QNetworkReply *rep)
                         model_deviceList->setItem(i,2,new QStandardItem(""));;
                         ui->tableview_daishen->setIndexWidget(model_deviceList->index(i,2),btn2);
                         btn2->setProperty("row",i);
-                        connect(btn2,SIGNAL(clicked(bool)),this,SLOT(onbutton_tongguoclick()));
+                        connect(btn2,SIGNAL(clicked(bool)),this,SLOT(onbutton_butongguoclick()));
 
                         itemlist.append(i);
 
                     }
                     //ui->tableview_daishen->setItemDelegate(new ItemDelegateforCol(1));
+                }
+            }
+        }
+    }
+    if(rep==tongguo_reply)//提交通过
+    {
+        if(rep->error()==QNetworkReply::NoError)
+        {
+            QByteArray a =rep->readAll();
+            qDebug()<<a;
+            QJsonParseError jsonError;
+            QJsonDocument json = QJsonDocument::fromJson(a, &jsonError);
+            if(jsonError.error == QJsonParseError::NoError)//
+            {
+                if(json.isObject())
+                {
+                    QJsonObject obj=json.object();
+                    int code=obj.take("code").toInt();
+                    if(code==1)
+                    {
+                        getDevicelist();
+                    }else
+                    {
+                        getDevicelist();
+                    }
+                }
+            }
+        }
+    }
+    if(rep==butongguo_reply)//提交不通过
+    {
+        if(rep->error()==QNetworkReply::NoError)
+        {
+            QByteArray a =rep->readAll();
+            qDebug()<<a;
+            QJsonParseError jsonError;
+            QJsonDocument json = QJsonDocument::fromJson(a, &jsonError);
+            if(jsonError.error == QJsonParseError::NoError)//
+            {
+                if(json.isObject())
+                {
+                    QJsonObject obj=json.object();
+                    int code=obj.take("code").toInt();
+                    if(code==1)
+                    {
+                        getDevicelist();
+                    }else
+                    {
+                        getDevicelist();
+                    }
                 }
             }
         }
@@ -296,53 +368,53 @@ void MainWindow1::onbutton_tongguoclick()//通过
 {
     QPushButton* button=(QPushButton*)sender();
     int row =button->property("row").toInt();
-    qDebug()<<row;
-
-        QJsonObject json;
-        for(int i=0;i<globalvar::deviceList.count();i++)
-        {
-            QJsonObject device;
-            device.insert("deviceId",globalvar::deviceList[i].value("deviceId"));
-            device.insert("deviceStatus",globalvar::deviceList[i].value("deviceStatus"));
-            device.insert("deviceRemark",globalvar::deviceList[i].value("deviceRemark"));
-            json.insert("d"+QString::number(i),device);
-        }
-        QJsonDocument docu;
-        docu.setObject(json);
-        QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
-        //QString json_str(byte_array);
-        QNetworkRequest req;
-        req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
-        //发送用户数据到服务器
-        tijiaodevice_reply=manager->post(req,byte_array);
-        QReplyTimeout *pTimeout = new QReplyTimeout(tijiaodevice_reply, 10000);
-        connect(pTimeout, &QReplyTimeout::timeout, [=]() {
-            ;
-            });
+    QJsonObject json;
+    json.insert("deviceId",globalvar::deviceList[row].value("deviceId"));
+    json.insert("deviceStatus","2");
+    json.insert("deviceRemark",globalvar::deviceList[row].value("deviceRemark"));
+    QJsonDocument docu;
+    docu.setObject(json);
+    QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
+    //QString json_str(byte_array);
+    QNetworkRequest req;
+    req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
+    //发送用户数据到服务器
+    tongguo_reply=manager->post(req,byte_array);
+    QReplyTimeout *pTimeout = new QReplyTimeout(tongguo_reply, 10000);
+    connect(pTimeout, &QReplyTimeout::timeout, [=]() {
+        ;
+        });
 }
 
 void MainWindow1::onbutton_butongguoclick()//不通过
 {
 
-
     QPushButton* button=(QPushButton*)sender();
     int row =button->property("row").toInt();
-    qDebug()<<row;
+    remark *mark=new remark(row,0);
+    int result=mark->exec();
+    if(result==1)//accept
+    {
 
-        QJsonObject json;
-        json.insert("deviceId",globalvar::deviceList[row].value("deviceId"));
-        json.insert("deviceStatus","3");
-        json.insert("deviceRemark",globalvar::deviceList[row].value("deviceRemark"));
-        QJsonDocument docu;
-        docu.setObject(json);
-        QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
-        //QString json_str(byte_array);
-        QNetworkRequest req;
-        req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
-        //发送用户数据到服务器
-        tijiaodevice_reply=manager->post(req,byte_array);
-        QReplyTimeout *pTimeout = new QReplyTimeout(tijiaodevice_reply, 10000);
-        connect(pTimeout, &QReplyTimeout::timeout, [=]() {
-            ;
-            });
+    }
+    if(result==0)//reject
+    {
+        return;
+    }
+    QJsonObject json;
+    json.insert("deviceId",globalvar::deviceList[row].value("deviceId"));
+    json.insert("deviceStatus","3");
+    json.insert("deviceRemark",globalvar::deviceList[row].value("deviceRemark"));
+    QJsonDocument docu;
+    docu.setObject(json);
+    QByteArray byte_array = docu.toJson(QJsonDocument::Compact);
+    //QString json_str(byte_array);
+    QNetworkRequest req;
+    req.setUrl(QUrl("http://cddongli.com/quexian/index.php?s=/App/AppDevice2/changeStatus"));
+    //发送用户数据到服务器
+    butongguo_reply=manager->post(req,byte_array);
+    QReplyTimeout *pTimeout = new QReplyTimeout(butongguo_reply, 10000);
+    connect(pTimeout, &QReplyTimeout::timeout, [=]() {
+        ;
+        });
 }
