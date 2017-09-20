@@ -69,7 +69,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QTableView" name="tableview_tongguo"/>
+             <widget class="QListView" name="listView"/>
             </item>
            </layout>
           </item>
@@ -92,7 +92,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QTableView" name="tableview_weitongguo"/>
+             <widget class="QListView" name="listView_2"/>
             </item>
            </layout>
           </item>

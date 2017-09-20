@@ -93,6 +93,8 @@ void Login::replyLOGIN(QNetworkReply *rep)
                     globalvar::userInfo.insert("memberType",obj.take("memberType").toString());
                     MainWindow1 *w=new MainWindow1;
                     w->show();
+//                    BaseWindow *w=new BaseWindow;
+//                    w->show();
                 }else
                 {
 

@@ -8,6 +8,7 @@ deviceInfo::deviceInfo(int devicerow,QWidget *parent) :
     ui(new Ui::deviceInfo)
 {
     ui->setupUi(this);
+    //this->setWindowFlags(Qt::FramelessWindowHint);
     _devicerow=devicerow;
     init();
 }

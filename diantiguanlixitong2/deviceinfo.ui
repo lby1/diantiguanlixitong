@@ -19,138 +19,142 @@
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTableWidget" name="tableWidget">
-       <property name="textElideMode">
-        <enum>Qt::ElideLeft</enum>
-       </property>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>新建行</string>
-        </property>
-       </row>
-       <column>
-        <property name="text">
-         <string>新建列</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>新建列</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>新建列</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>新建列</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>新建列</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="tableWidget2"/>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QTableWidget" name="tableWidget">
+         <property name="textElideMode">
+          <enum>Qt::ElideLeft</enum>
+         </property>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>新建行</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>新建列</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>新建列</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>新建列</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>新建列</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>新建列</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableWidget2"/>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

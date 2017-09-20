@@ -3,5 +3,10 @@
         <file>Resources/MyTitle/max.png</file>
         <file>Resources/MyTitle/close.png</file>
         <file>Resources/MyTitle/min.png</file>
+        <file>Resources/MyTitle/111.jpg</file>
+        <file>Resources/MyTitle/222.png</file>
+        <file>Resources/MyTitle/1111.jpg</file>
+        <file>Resources/MyTitle/2222.jpg</file>
+        <file>Resources/MyTitle.css</file>
     </qresource>
 </RCC>
